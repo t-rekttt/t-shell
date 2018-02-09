@@ -9,20 +9,26 @@ app.use(bodyParser.json({extended: true}));
 app.get('/exec', (req, res) => {
 	if (req.query.command) {
     let child = shell.exec(req.query.command, {async: true, silent: true});
+    let timeout = setTimeout(() => {
+      let messages = [{text: 'Response timed out'}];
+      return res.json({messages});
+    }, 3000);
+    
     child.stdout.on('data', function(data) {
       // let messages = data.split('\n').map(a => {return {text: a}});
-      let messages = [{text: data || 'ok'}];
-      res.json({messages});
+      let messages = [{text: data}];
+      clearTimeout(timeout);
+      return res.json({messages});
     });
     
     child.stderr.on('data', function(data) {
       // let messages = data.split('\n').map(a => {return {text: a}});
       let messages = [{text: data}];
-      res.json({messages});
+      clearTimeout(timeout);
+      return res.json({messages});
     });
-    
 	} else {
-	res.json({messages: [{text: 'No command specified'}]});
+	  return res.json({messages: [{text: 'No command specified'}]});
 	}
 });
 
