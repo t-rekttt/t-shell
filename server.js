@@ -7,15 +7,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({extended: true}));
 
 app.get('/exec', (req, res) => {
-  console.log('test');
-  
 	if (req.query.command) {
-		if (req.query.command.indexOf('rm')===-1) {
-			res.json({messages: [{text: shell.exec(req.query.command).stdout}]});
-		}
+	res.json({messages: [{text: shell.exec(req.query.command)}]});
 	} else {
-    res.json({messages: [{text: 'No command specified'}]});
-  }
+	res.json({messages: [{text: 'No command specified'}]});
+	}
 });
 
 // listen for requests :)
