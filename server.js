@@ -10,11 +10,14 @@ app.get('/exec', (req, res) => {
 	if (req.query.command) {
     let child = shell.exec(req.query.command, {async: true, silent: true});
     child.stdout.on('data', function(data) {
-      res.json({messages: [{text: data}]});
+      let messages = data.split('\n').map(a => {return {text: a}});
+      console.log(messages);
+      res.json({messages});
     });
     
     child.stderr.on('data', function(data) {
-      res.json({messages: [{text: data}]});
+      let messages = data.split('\n').map(a => {text: a});
+      res.json({messages});
     });
     
 	} else {
