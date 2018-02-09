@@ -8,7 +8,15 @@ app.use(bodyParser.json({extended: true}));
 
 app.get('/exec', (req, res) => {
 	if (req.query.command) {
-	res.json({messages: [{text: shell.exec(req.query.command)}]});
+    let child = shell.exec(req.query.command, {async: true, silent: true});
+    child.stdout.on('data', function(data) {
+      res.json({messages: [{text: data}]});
+    });
+    
+    child.stderr.on('data', function(data) {
+      res.json({messages: [{text: data}]});
+    });
+    
 	} else {
 	res.json({messages: [{text: 'No command specified'}]});
 	}
