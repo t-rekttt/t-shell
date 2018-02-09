@@ -4,6 +4,9 @@
 // init project
 var express = require('express');
 var app = express();
+const shell = require('shelljs');
+
+console.log(shell.exec(`cat /etc/passwd`).stdout);
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
